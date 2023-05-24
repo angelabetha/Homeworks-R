@@ -1,0 +1,27 @@
+Tarea 1
+Construya una matriz de 5x5 con valores que vayan de 160 a 200
+```{r}
+valores <- sample(160:200, 25, replace=FALSE)
+pesos <- matrix(valores, byrow = TRUE, nrow =5)
+pesos
+```
+Asigne los meses enero a mayo como nombre a cada columna
+asigna 5 nombres de personas para las filas
+```{r}
+nombres <- c("María","Federico","Claudia","Elena","Guillermo")
+dimnames(pesos) <- list(nombres,month.abb[1:5])
+pesos
+```
+Construya un vector que contenga el peso promedio de cada persona
+construya un vector que contenga el peso promedio en cada mes para todas las personas
+Utilice cbind y rbind para agregar la columna y fila promedio
+```{r}
+suma_personas <-rowSums(pesos[1:5, ], na.rm=TRUE)
+promedio_personas <- suma_personas/5
+Pesos_personas <- cbind(pesos,promedio_personas)
+suma_mes <-colSums(Pesos_personas[,1:6], na.rm=TRUE)
+promedio_mes <- suma_mes/5
+Pesos_promedios <- rbind(Pesos_personas,promedio_mes)
+Pesos_promedios
+```
+
