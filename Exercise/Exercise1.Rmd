@@ -1,0 +1,29 @@
+Ejercicio
+create height and weight vectors of 5 people
+```{r}
+height <- c(152,173,168,153,170)
+weight <- c(103,139,140,160,160)
+```
+create vector gender that stores the sex of the 5 people
+```{r}
+gender <- c("Female","Male","Male","Female","Male")
+```
+create a data frame with height, weight and gender
+```{r}
+infodf <- data.frame(height,weight,gender)
+infodf
+```
+change the gender column of the df to a factor
+order the gender as female, male
+```{r}
+gender_factor <- factor(gender)
+levels(gender_factor) <- c("Female","Male")
+gender_factor
+positions<-order(infodf$gender)
+infodf[positions,]
+infodf[,"gender"]
+```
+
+
+
+
