@@ -1,0 +1,103 @@
+Funciones en R
+Una función es un conjunto de instrucciones que permiten escribir un fragmento de código parametrizado, convirtiendo las entradas en resultados deseados. Una función puede considerarse un subprograma que resuelve una subtarea, permite estructurar u organizar el código de un programa.
+
+  Estructura de función:
+    Una función está estructurada de la siguiente manera:
+      Entradas (inputs): sirven para ingresar información necesaria para realizar el procedimiento de la función. Pueden estar vacíos y que el usuario ingrese valores, o tener valores por defecto. Una función puede tener o no argumentos de entrada.
+      Cuerpo: está formado por un conjunto de instrucciones que transforman las entradas en las salidas deseadas. Si el cuerpo de la función está formado por varias instrucciones éstas deben ir entre llaves { }.
+      Salidas (outputs): son los resultados de la función, la última expresión que se ejecuta.
+      Basicamente una función debe tener la siguiente estructura:
+      .
+      nombre <- function(argumentos) {
+      operaciones
+      }
+      
+  Ejemplo de función:
+    Función suma:
+    
+```{r}
+suma <-function(a,b){ #se declaran las variables de entrada
+  return(a+b) #Se dan las instrucciones 
+}
+suma(a=5,b=4) #Probando la función
+```
+
+   Función valor absoluto
+  
+```{r}
+absoluto <- function(x) { # valor absoluto de x 
+    if(x<0){ 
+      (x<- -x) #Condición para cuando x<0
+    }
+      x  #Condición si x>0
+}
+absoluto(-53)
+```
+
+  Argumentos de una función:
+    Los argumentos son las variables necesarias para que una función realice sus operaciones, los valores son asignados al nombre del argumento por el usuario al ejecutar la función. 
+    Los argumentos pueden ser datos, estructuras de datos, conexiones a archivos u otras funciones y todos deben tener nombres diferentes.
+
+
+  Argumentos por valor:
+    Estos argumentos se refieren al paso de valores de variables a una función mediante una copia de su valor actual. Esto garantiza que los datos originales se mantengan intactos, evitando modificaciones no deseadas. Al utilizar argumentos por valor, se protegen los datos originales, se evitan efectos secundarios indeseados, se promueve la modularidad del código, se mejora la claridad y legibilidad del código, y se facilita la paralelización del programa. Se debe tener en cuenta que el uso de argumentos por valor puede tener un impacto en la eficiencia y el uso de memoria, especialmente cuando se trabajan con conjuntos de datos grandes. En esos casos, se pueden considerar otros enfoques, como los argumentos por referencia.
+
+
+
+FAMILIA APPLY
+
+  Lapply: esta función es un caso especial de apply(), diseñada para aplicar funciones a todos los elementos de una lista. La l de su nombre se refiere a "lista", el resultado siempre será una lista. Con esta función se intenta coercionar a una lista el objeto que se da como argumento y después aplica una función a todos sus elementos.
+
+  La estructura de esta función es:
+
+    lapply(X, OPERACION A APLICAR)
+    
+```{r}
+a <- list(A = c(1, 2, 0, 8),
+          B = data.frame(x = 1:4, y = c(1, 9, 9, 8)))
+lapply(a,sum) #la función a utilizar suma los elementos de A & B
+```
+
+```{r}
+trees[1:5, ] #trees es un dataframe que ya trae R
+
+mean_trees <- lapply(trees,mean) #Tenemos como función "mean", y se aplica a todo el dataframe
+mean_trees
+class(mean_trees) #El resultado de lapply es de clase "lista"
+```
+
+  Sapply: La función sapply es una función vectorizada que permite iterar sobre una lista o vector sin la necesidad de usar el bucle for, que es conocido por ser lento en R. En este tutorial mostraremos cómo trabajar con la función sapply de R con varios ejemplos.
+
+  La sintaxis básica de la función sapply () es la siguiente:
+
+    sapply (X, OPERACIÓN A APLICAR)
+    
+```{r}
+#calcular el cuadrado de los elementos de un vector
+sapply(1:10, function(i) i ^ 2)
+```
+
+  La salida de la función sapply no está limitada a ser una lista. Y se puede usar para iterar sobre las columnas y filas de un data frame sin necesidad de crear un bucle 
+  
+```{r}
+df <- trees[1:5, ]
+sapply(1:ncol(df), function(i) {
+       sapply(1:nrow(df), function(j) {
+              df[j, i] * 2
+        })
+})
+```
+
+
+  Vapply: la función vapply es muy similar a sapply, la diferencia es que al utilizar vapply es necesario especifiar qué tipo de salida se desea obtener
+  
+```{r}
+vapply(my_list, length, integer(1)) 
+```
+
+```{r}
+x <- list(A = 1, B = 1:3, C = 1:7)
+x
+vapply(x,length, FUN.VALUE = 0L) #devuelve un vector con la cantidad de cada elemento de la lista
+```
+
