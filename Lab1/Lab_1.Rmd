@@ -1,0 +1,100 @@
+Laboratorio 1
+Cree un vector por cada estudiante en donde almacene los 5 registros, luego asigne el vector a una variable
+```{r}
+vec_a <- c(71.9,21.4,35.9,62.6,FALSE)
+vec_b <- c(59.8,13.4,75.3,75.9,TRUE)
+vec_c <- c(47.9,55.4,85.2,68.9,TRUE)
+vec_d <- c(89.2,65.3,41.5,84.1,FALSE)
+vec_e <- c(63.7,44.2,88.4,95.6,TRUE)
+total_vec <- c(vec_a,vec_b,vec_c,vec_d,vec_e)
+
+#Construya una matriz que reciba como parámetro el vector creado en el inciso 1.2. Luego imprima la matriz.
+m <- matrix(total_vec, byrow = TRUE, nrow =5)
+```
+
+Cree 2 vectores más, uno servirá para almacenar los nombres de los estudiantes, queda a su criterio elegir los nombres. El segundo vector servirá para el nombre de los cursos y para la columna que registra la mayoría de edad
+
+```{r}
+vector_nombre_filas <- c("Maria","Daniel","Enrique","Elena","Federico")
+vector_nombre_columnas <- c("Programación", "Estadística", "Matemáticas", "Física", "Mayoria_edad")
+rownames(m) <- vector_nombre_filas
+colnames(m) <-vector_nombre_columnas
+m
+```
+
+
+Construya un vector que contenga la sumatoria de todas las notas por cada estudiante, utilice la función rowSum para hacerlo, tome en cuenta que solo debe considerar las primera 4 columnas, porque la última corresponde a la mayoría de edad.
+
+
+```{r}
+vector_suma <- rowSums(m[,1:4])
+m_new <- cbind(m,vector_suma)
+m_new
+```
+
+seleccione la fila 1, 2 y 5 y las columnas 3 y 4. Almacene el resultado en una nueva variable e imprima el resultado
+
+```{r}
+m_select <-m_new[c(1,2,5),c(3,4)]
+m_select
+```
+
+Construya un data frame utilizando la matriz como parámetro. Utilice la función subset en el nuevo data frame para filtrar por la siguiente condición: Que la columna Estadística sea mayor a 50 y que Mayoria_edad sea verdadero.
+
+```{r}
+m_df <-data.frame(m_new)
+subset(m_df, subset = Estadística > 50)
+subset(m_df, subset = Mayoria_edad == TRUE)
+```
+
+Construya una función que recorra la matriz
+
+```{r}
+func_reco <-function(x){
+  for(i in 1:nrow(x[,1:4])){
+    for(j in 1:ncol(x[,1:4])){
+      value<-x[i,j]
+      if (value <= 45){
+      print(paste("Estudiante en riesgo",value))
+    } 
+    if (value > 45 & value<61){
+      print(paste("Estudiante puede ser aprobado",value))
+    } 
+    if (value >= 61){
+      print(paste("Estudiante aprobado",value))
+    }
+    }
+  }
+}
+
+func_reco(m_new)
+
+```
+
+
+Construya la función index_education que reciba un parámetro de nombre grade
+
+```{r}
+index_education <- function(grade){
+  index <-(1+(grade/100))/2
+  return(index)
+}
+index_education(79)
+```
+
+Utilice el data frame construido seleccionando todas las filas y solamente las primeras 4 columnas, luego asigne el resultado en una nueva variable.
+
+```{r}
+m_df_new <-m_df[,1:4]
+m_index_edu <- lapply(m_df_new,index_education)
+m_index_edu
+```
+
+
+
+
+
+
+
+
+
