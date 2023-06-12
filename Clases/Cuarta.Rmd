@@ -1,0 +1,247 @@
+Listas
+En R, una lista es como una to-do. Nos permite juntar una variedad de objetos bajo un nombre 
+sin importar el caracter al que pertenece. Estos objetos pueden ser matrices, vectores
+data frames, o incluso otras listas
+Se construye usando la función list(comp1,comp2,...)
+
+```{r}
+my_vector <- 1:10
+my_matrix <- matrix(1:9, ncol=3)
+my_df <- mtcars[1:10,]
+
+my_list <- list(my_vector, my_matrix, my_df)
+
+#Para darle un nombre a los elementos de la lista
+#names(my_list) <- c("Vec", "Mat", "DF")
+#otra opcion para poner nombre es
+
+my_list <- list(vec=my_vector, mat=my_matrix, df=my_df)
+```
+
+
+```{r}
+mov <- "The Shining"
+act <- c("Jack Nicholson", "Shelley Duvall", "Danny Lloyd", "Scatman Crothers", "Barry Nelson")
+
+scores <- c(4.5, 4, 5)
+sources <- c("IMDb1", "IMDb2", "IMDb3")
+comments <- c("Best Horror Film", "A truly brilliant and scary film", "A masterpiece of psychological horror")
+rev <- data.frame(scores, sources, comments)
+
+shining_list <- list(moviename = mov, actors =act, reviews = rev)
+
+#Para hacer selecciones
+shining_list[1]
+shining_list$actors
+shining_list["actors"]
+#con shining_list[[2]] tengo un vector y lo puedo tratar como tal
+#Entonces puedo tener un elemento de ese vector
+shining_list[[2]][3]
+shining_list[[3]][1,3]
+shining_list[[3]]$scores
+shining_list[[3]][,2]
+shining_list[[3]][c(1,3),2]
+```
+
+Condiciones de flujo de control
+
+Equidad
+La forma más basica de comparación es equidad ("==")
+R es sensible a mayusculas y minusculas
+
+```{r}
+3 == (2+1)
+"intermediate" != "r"
+TRUE == FALSE
+"Rchitect" != "rchitect"
+```
+
+También se puede usar <, >, >=,<=
+```{r}
+(1+2) > 4
+"dog" > "Cats"
+"z" > "x"
+#En este caso toma el orden alfabético de los caracteres
+TRUE <= FALSE
+-6*5+2 <= -10+1
+```
+
+
+
+```{r}
+linkedin <- c(16,9,13,5,2,17,14)
+facebook <- c(17,7,5,16,8,13,14)
+linkedin > 5
+facebook <=10
+linkedin > facebook
+linkedin < facebook
+linkedin == facebook
+
+views <- matrix(c(linkedin, facebook), nrow = 2, byrow = TRUE)
+views == 13
+my_list$vec == 5
+#Al usar una lista, tengo que especidicar que elemento voy a comparar
+#no puedo solo decir my_list == 5, debo especificar a que elemento deseo comparar
+
+```
+
+Operadores lógicos
+&(and) | (or)
+
+```{r}
+TRUE & TRUE
+FALSE | TRUE
+5 <= 5 & 2<3
+3<4 | 7<6
+#No puedo usar 3<x<7, debo separarlo 
+x <- 6
+3<x & x<7
+
+linkedin[2] > 10 & facebook[3]==5 #falso & verdadero = falso
+linkedin[2] < 10 & facebook[3]==5 #verdadero & verdadero = verdadero
+linkedin[2] > 10 | facebook[3]==5 #falso o verdadero = verdadero
+linkedin > 10 & facebook < 10
+linkedin >= 12 | facebook >= 12
+```
+
+
+IF
+if (condition){expr}
+
+```{r}
+medium <- "LinkedIn"
+num_views <- 14
+
+if (medium == "LinkedIn"){
+  print("Showing LinkedIn information")
+} else {
+  print("Unknown medium")
+}
+if(num_views > 15){
+  print("You are popular! :)") 
+} else{
+    print("Not so popular :(")
+}
+```
+
+
+Else if
+
+```{r}
+medium_2 <- "Facebook"
+num_views_2 <- 14
+
+if (medium_2 == "Facebook"){
+  print("Showing Facebook information")
+} else if (medium_2 == "LinkedIn") {
+  print("Showing LinkedIn information")
+} else {
+  print("Unknown medium")
+}
+if(num_views_2 > 15){
+  print("You are popular! :)") 
+} else if (num_views_2 <=15 & num_views_2 > 10){
+  print("Your number of views is average")
+} else {
+  print("Not so popular :(")
+}
+```
+
+
+Else if ejercicio
+```{r}
+number <- 100
+if (number <10){
+  if (number <5) {
+    result <- "extra small"
+  } else {
+    result <- "small"
+  }
+} else if (number < 100) {
+  result <- "medium"
+} else {
+  result <- "large"
+}
+print(paste("The number is",number,", and classifies as",result))
+```
+
+Loops
+
+while (condition) { expr}
+
+```{r}
+speed <- 64
+while (speed >30){
+  print("Slow down!")
+  speed <- speed -7
+  print(speed)
+}
+```
+if y while
+
+```{r}
+speed <- 64
+while(speed> 30){
+  print(paste("Your speed is", speed))
+  if (speed >= 48) {
+    print("Slow down big time!")
+    speed <- speed -11
+  } else {
+    print("Slow down!")
+    speed <- speed - 6
+  } 
+}
+```
+
+
+
+Detener el loop con un break
+El break nos permite controlar un loop, cuando while encuentra un break cierra el loop completamente
+
+```{r}
+speed <- 60
+
+while (speed > 30){
+  print(paste("Your speed is", speed))
+  
+  if(speed < 50){
+    break
+  }
+  
+  if (speed > 48){
+    print("Slow down big time!")
+    speed <- speed-11
+  } else {
+    print("Slow down!")
+    speed <- speed -6
+  }
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

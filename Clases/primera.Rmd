@@ -1,0 +1,82 @@
+Intro to basics, no lo toma como código
+control+option+i agrega un bloque de cógigo
+con el %% da el residuo de la division de dos números
+con # pongo comentarios dentro del código
+
+
+```{r}
+3 + 4
+4+9
+28%%6
+#comentario
+```
+Para tener resultado de lo anterior puedo seleccionar la operacion a ejecutal y control+enter
+El resultado aparece abajo del código y en la consola.
+También puedo colocarme en la última linea, donde esta el fin del codigo y dar control+enter
+
+
+variables
+Declaro un contenedor e indico que va a tener adentro
+Si quiero saber el valor de cierta variable basta con poner el nombre, seleccionar y ctl+enter
+```{r}
+my_var <- 10
+my_var2 <- "Hello world" 
+my_var3 <- 4
+my_var4 <- "texto"
+my_var + my_var3
+```
+
+Basic data types in R
+Hay difeentes tipos de datos, al declarar variable no se especifica, pero si hay tipos de datos
+numericos, que son los números, cadenas, logicos (en mayuscula TRUE o FALSE)
+Para saber qué tipo de variable es una, puedo usar class(variable) y el resultado es el tipo
+
+
+
+```{r}
+my_numeric <- 3
+my_character <- "cadena"
+my_logical <- FALSE
+
+class(my_character)
+```
+
+Vectores
+
+se pone el nombre de la variable, y para comenzar un vector se escribe c(),
+la c es de collection 
+
+```{r}
+numeric_vector <- c(1,2,3)
+
+character_vector <- c("a","b", "c")
+boolean_vector <- c(TRUE, FALSE, FALSE)
+
+vector_range <- c(1:10)
+```
+
+Ejercicio en clase
+-crear un vector con valores en el rango 1 a 12
+-crear un vector con 5 nombes de compañeros
+
+
+```{r}
+my_numeric_vector <- c(1:12)
+my_character_vector <- c("Saul", "Héctor", "Pablo", "Luis", "José")
+class(my_character_vector)
+class(my_numeric_vector)
+my_numeric_vector
+my_character_vector
+```
+Naming
+
+nombrar las columnas de los vectores names(nombre vector) <- c()
+Se puede usar números o valores de tipo cadena para nombrar las columnas
+
+```{r}
+poker_vector <- c(140,80,20,55,60)
+roulette_vector <- c(24,6,100,87,45)
+names(poker_vector) <- c(1:5)
+names(roulette_vector) <- c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes")
+```
+

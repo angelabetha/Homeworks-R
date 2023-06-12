@@ -1,0 +1,182 @@
+Librerias
+gapminder contiene datos
+dplyr sirve para poder manipular la información
+
+la sintaxis para mandar a llamar un paquete es
+  library(Nombre_paquete)
+  
+Para instalar los paquetes me voy a la opción de "Tools" -> "install package"
+```{r}
+library(gapminder)
+library(dplyr)
+```
+
+```{r}
+gapminder
+str(gapminder)
+```
+
+Filtering
+
+Extrae observaciones particulares basado en una condición.
+%>% se conoce tambien como pyp
+
+```{r}
+#filtramos en gapminder para el aó 1957
+gapminder %>% #el es como un conector, esta indicando que tome el df y le conecte la instruccion
+  filter(year == 1957)
+
+gapminder %>%
+  filter(year == 1957, country =="China") #esto es como un and
+
+gapminder %>%
+  filter(year == 1957 | country=="China") #tambien puedo usar un or
+```
+
+Arranging
+arrange() ordena las filas de un df 
+
+```{r}
+gapminder %>%
+  arrange(lifeExp,pop)
+#prdena ascendente
+
+gapminder %>%
+  arrange(desc(lifeExp))
+#ordena descendiente
+
+gapminder %>%
+  filter(year == 1957) %>%
+  arrange(desc(pop))
+```
+
+Ejercicio
+
+en una secuencia llamada pipes de ds gapminder
+filtrar para el año 1967, continente america y pop > 10000000
+arrange en orden descendiente de life expectancy
+
+
+```{r}
+gapminder %>%
+  filter(year == 1967, continent == "Americas", pop > 10000000) %>%
+  arrange(desc(lifeExp))
+```
+
+otra forma de hacerlo también es por partes
+
+```{r}
+gapminder %>%
+  filter(year == 1967) %>%
+  filter(continent == "Americas") %>%
+  filter(pop > 10000000) %>%
+  arrange(desc(lifeExp))
+```
+
+
+
+Mutate
+permite modificar una variable
+
+```{r}
+gapminder %>%
+  filter(lifeExp > 28) %>%
+  mutate(lifeExp = 12 * lifeExp)
+#Reemplazo datos en una columna
+
+gapminder %>%
+  mutate(lifeExpMonths = lifeExp*12)
+#Agrego una columna
+```
+
+
+```{r}
+gapminder %>%
+  filter(year == 2007) %>%
+  mutate(lifeExpMonths = lifeExp * 12) %>%
+  arrange(desc(lifeExpMonths))
+```
+
+
+
+Visualización con ggplot2
+```{r}
+library(ggplot2)
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+ggplot(gapminder_1952, aes(x=pop, y=gdpPercap)) + 
+  geom_point()
+
+ggplot(gapminder_1952, aes(x=pop, y= lifeExp )) + 
+  geom_point()
+```
+
+
+```{r}
+ggplot(gapminder_1952, aes(x=pop, y=gdpPercap)) + 
+  geom_point() +
+  scale_x_log10()
+
+ggplot(gapminder_1952, aes(x=pop, y= lifeExp )) + 
+  geom_point() +
+  scale_x_log10()
+```
+
+
+```{r}
+ggplot(gapminder_1952, aes(x=pop, y=gdpPercap)) + 
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
+
+ggplot(gapminder_1952, aes(x=pop, y= lifeExp )) + 
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+Estética
+
+agregamos tamaño y color 
+
+```{r}
+ggplot(gapminder_1952, aes(x=pop, y= lifeExp, color =continent, size=gdpPercap)) + 
+  geom_point() +
+  scale_x_log10()
+```
+
+Faceting
+
+```{r}
+gapminder_1952
+ggplot(gapminder_1952, aes(x=pop, y= lifeExp )) + 
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ continent) #~ se pone con option+ñ
+```
+
+
+```{r}
+ggplot(gapminder, aes(x=gdpPercap, y= lifeExp, color=continent, size=pop )) + 
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ year) #~ se pone con option+ñ
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

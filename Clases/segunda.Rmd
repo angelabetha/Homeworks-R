@@ -1,0 +1,191 @@
+Cálculos
+
+para vectores con números podemos hacer cálculos, deben tener la misma cantidad
+de elementos en las operaciones que vamos a trabajar
+
+```{r}
+c(1,2,3) + c(4,5,6)
+```
+
+También se puede hacer con variables que representan un vector
+```{r}
+a <- c(1,2,3)
+b <- c(4,5,6)
+c <- a+b
+```
+
+De la clase pasada teníamos estos vectores
+```{r}
+poker_vector <- c(140,80,20,55,60)
+roulette_vector <- c(24,6,100,87,45)
+names(poker_vector) <- c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes")
+names(roulette_vector) <- c("Lunes", "Martes", "Miercoles", "Jueves", "Viernes")
+```
+
+y hacemos unos cálculos con estos vectores
+
+```{r}
+total_daily <- poker_vector + roulette_vector
+
+sum(poker_vector,roulette_vector)
+sum(total_daily)
+#suma todos los elementos de 1 o mas vectores
+```
+
+Podemos utilizar un solo elemento de un vector. vector[]
+En otros lenguajes se comienza a ver desde la posición cero, en R se comienza en 1
+
+```{r}
+poker_vector[3]
+#valor de miércoles ^
+poker_vector[2:4]
+#esto se llama slicing
+poker_vector[c(1,3,5)]
+#ambas muestran un rango de ese vector o índices en específico
+poker_start <-poker_vector[c("Lunes","Miercoles","Viernes")]
+#también puedo buscar segun los nombres que yo coloque a las columnas
+sum(poker_start)
+```
+
+Puedo sustituir valores de un vector
+```{r}
+roulette_vector
+roulette_vector[2]=20
+#cambio solo un dato
+roulette_vector[c(2,4,5)] = c(3,90,60)
+#puedo cambiar varios datos al mismo tiempo
+roulette_vector
+length(roulette_vector)
+#length me da un valor con el número de elementos que tiene un vector
+```
+
+Operadors de comparación
+< menor que, > mayor uqe, <= menor o igual que, >= mayor o igual que
+== igualdad, != no es igual
+
+```{r}
+selection_vector <- poker_vector > 65
+#me dice cuales son mayors a 65
+poker_vector[selection_vector]
+#devuelve los datos que cumplen con la condición que establecí
+poker_vector[!selection_vector]
+# con ! estoy negando, entonces tengo todo lo no TRUE de selection vector
+```
+
+
+ejercicio
+-Crear dos vectores
+-Comparar ambos con operaciones lógicas
+-Multiplicar ambos vectores y almacenar el resultado
+```{r}
+x <- c(1,2,3,4,8)
+y <- c(1,5,3,7,8)
+x
+y
+x < y
+#Valores de x < y
+x > y
+#Valores de x > y
+x <= y
+#Valores de x <= y
+x >= y
+#Valores de x >= y
+x == y
+#Valores de x == y
+x != y
+#Valores de x != y
+multiply <-x*y
+multiply
+#multiplicacion
+result <- sum(multiply)
+#suma de multiply
+result
+```
+
+MATRICES
+
+Se usa la fun matrix(valores, nrows, ncol, byrow =True o False, dimnames)
+byrow, crea 1,2,3     va llenando por filas. Si pongo byrow=False lo hace por 
+            4,5,6     columnas
+
+Si tengo más filas o columnas que valores, rellena los espacios repitiendo el
+patron
+
+```{r}
+m1 <- matrix(1:12, nrow = 3)
+dimnames(m1) <- list(month.abb[1:3], month.abb[4:7])
+m1
+m2 <- matrix(1:12, byrow = TRUE, nrow =3)
+m2
+```
+
+Tambien puedo nombrar filas y columnas
+
+```{r}
+new_hope <-c(460.99,314.4)
+empire_strikes <- c(290.47, 247.9)
+return_jedi <- c(309.3,165.8)
+
+box_office <- c(new_hope,empire_strikes, return_jedi)
+region <- c("US", "non-US")
+titles <- c("A new hope","the empire strikes back","Return of the jedi")
+
+star_wars_matrix <- matrix(box_office, byrow =TRUE, nrow=3)
+rownames(star_wars_matrix) <- titles
+colnames(star_wars_matrix) <-region
+```
+
+
+
+suma de filas
+rowSums(my_matrix)
+
+```{r}
+star_wars_matrix
+worldworde_vector <- rowSums(star_wars_matrix)
+
+```
+
+
+cbind() rbind(), me permite agregar filas o columnas
+big_matrix <- cbind(matrix1, matrix2, vector1, vector2,...)
+
+```{r}
+all_starwars_matrix <- cbind(star_wars_matrix,worldworde_vector)
+```
+
+suma columna
+
+```{r}
+total_cols <- colSums(all_starwars_matrix)
+total_matrix <- rbind(all_starwars_matrix,total_cols)
+```
+
+Seleccion de elementos
+
+es parecido a los vectores pero en lugar de establecer un solo eje, son 2
+
+```{r}
+total_matrix
+total_matrix [2,1]
+total_matrix [2,c(1,2,3)]
+total_matrix [,2]
+
+#para que aparezca nombre de fila y columna
+#select one row with row title
+row_title <- "The empire strikes back"
+subset(total_matrix, rownames(total_matrix) %in% row_title)
+#select one column with column title
+column_title <- "US"
+subset(total_matrix, subset=TRUE, colnames(total_matrix) %in% column_title)
+#select a cell with row title and column title
+subset(total_matrix, rownames(total_matrix) %in% row_title, colnames(total_matrix) %in% column_title)
+```
+
+
+
+
+
+
+
+
