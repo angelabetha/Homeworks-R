@@ -1,0 +1,33 @@
+Proyecto
+
+Descripción
+
+La sepsis ocasiona en el mundo más de mil muertes cada día, muchos de estos pacientes adquieren la infección estando hospitalizados y constituye la complicación intrahospitalaria más frecuente. La infección de pacientes por las manos contaminadas del personal de salud es una de las formas de diseminación de los agentes infecciosos. La higiene de las manos es el factor individual más importante para el control de las infecciones, es difícil entender que un hecho tan rutinario en la práctica de la medicina, como lavarse las manos previo a examinar a un paciente, haya causado tanta controversia en la época de 1800.
+A principios de la década de 1840 se descubrió una enfermedad mortal que afectaba a las mujeres que acababan de dar a luz, cerca del 10% de las mujeres morían a causa de esta enfermedad y el origen provenía de las manos contaminadas del personal médico que atendía los partos.
+En este proyecto, vamos a analizar los datos que demuestran la importancia del lavado de manos, identificando anomalías en los procedimientos médicos.
+
+
+
+Cargar el paquete tidyverse
+Leer el archivo death_handwashing.csv 
+
+```{r}
+library(tidyverse)
+library(dplyr)
+
+death_handwashing <-read.csv("deaths_handwashing.csv",  # Nombre archivo
+         header = TRUE,        # Lee el encabezado
+         sep = ",",            # Separador de los valores
+         quote = "\"",         # Caracter de citaciones
+         dec = ".",            # Punto decimal
+         fill = TRUE,          # Rellenar celdas vacías 
+         comment.char = "",    # Carácter de los comentarios o cadenas vacías
+         encoding = "unknown", # Codificación del archivo
+         )   
+death_handwashing #Se guardó la información en una variable que se usará después
+```
+
+
+
+
+
