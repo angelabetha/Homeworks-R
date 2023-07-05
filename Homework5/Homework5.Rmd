@@ -1,0 +1,109 @@
+Homework 5
+
+
+
+
+```{r}
+library(tidyverse)
+library(dplyr)
+questions <- read.csv('questions.csv')
+answers <- read.csv('answers.csv')
+tags <- read.csv('tags.csv')
+question_tags <- read.csv('question_tags.csv')
+questions
+answers
+tags
+question_tags
+```
+
+
+Utilizar left_joins para asegurarse de mantener todas las preguntas, incluso aquellas sin un tag correspondiente.
+
+Relacionar questions y question_tags usando las columnas id y question_id, respectivamente. y tambien para la tabla tags.
+
+Utilice replace_na para cambiar los NA en la columna tag_name a "only-r"
+
+```{r}
+questions_with_tags <- questions %>%
+  left_join(question_tags, by = c("id" = "question_id")) %>%
+  left_join(tags, by = c("tag_id" = "id")) %>% 
+  replace_na(list(tag_name = "only-r"))
+```
+
+
+Realizar un breve análisis, para ello utilizar verbos de la familia dplyr como group by, summarize, arrange y averiguar el score promedio de las preguntas más frecuentes.
+
+Utilizar questions_with_tags y aplique group_by para la variable tag_name.
+Aplicar summarize para obtener el score promedio de cada pregunta y asígnar el
+nombre mean_score.
+Ordenar mean_score en forma descendente.
+```{r}
+questions_with_tags %>%
+  group_by(tag_name) %>%
+  summarise(mean_score = mean(score)) %>%
+  arrange(desc(mean_score))
+```
+
+
+
+Ahora unir questions con answers
+
+Utilizar inner_join para combinar las tablas questions y answers, luego aplicar los sufijos "_question" y "_answer", respectivamente.
+
+Agregar una nueva columna utilizando la función mutate. La nueva columna se llamará gap y contendrá la resta de creation_date_answer y creation_date_question. (creation_date_answer - creation_date_question).
+
+
+Se usa el comando as.Date() para poder operar, r reconoce las fechas como no numerico
+
+```{r}
+questions
+answers
+questions %>%
+  inner_join(answers, by = c("id" = "question_id"), suffix = c("_question", "_answer")) %>%
+  mutate(gap = as.Date(creation_date_answer) - as.Date(creation_date_question))
+```
+
+
+También se puede determinar cuántas preguntas realmente arrojan respuestas. Si se cuenta el número de respuestas para cada pregunta, se puede unir los conteos de respuestas con la tabla de preguntas.
+
+
+Contar y ordenar la columna question_id en la tabla de answers, luego almacene el resultado en la variable answer_counts. El comando tally cuenta cuantos elementos hay en cada grupo.
+
+
+```{r}
+answer_counts <- answers %>%
+  arrange(desc(question_id)) %>%
+  group_by(question_id) %>%
+  tally()
+```
+
+
+Relacionar la tabla questions con answer_counts (utilice left_join).
+Reemplazar los valores NA en la columna n con ceros.
+
+```{r}
+question_answer_counts <- questions %>%
+  left_join(answer_counts, by = c("id" = "question_id")) %>%
+  replace_na(list(n = 0))
+```
+
+
+
+Combinar question_tags con question_answer_counts usando inner_join.
+Usar otro inner_join para agregar la tabla tags.
+
+
+```{r}
+question_tags %>%
+  inner_join(question_answer_counts, by = c("question_id" = "id")) %>%
+  inner_join(tags, by = c("tag_id" = "id"))
+```
+
+
+
+
+
+
+
+
+
