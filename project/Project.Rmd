@@ -24,8 +24,107 @@ death_handwashing <-read.csv("deaths_handwashing.csv",  # Nombre archivo
          comment.char = "",    # Carácter de los comentarios o cadenas vacías
          encoding = "unknown", # Codificación del archivo
          )   
-death_handwashing #Se guardó la información en una variable que se usará después
+death_handwashing #Se guardó la información en una variable
 ```
+
+La tabla anterior muestra el número de mujeres que dieron a luz durante los años 1841 a 1846 en una ciudad al noreste de Austria, en dos clínicas en particular. Notará que dar a luz era muy peligroso; un número alarmante de mujeres murió como resultado del parto. Vemos esto con mayor claridad si observamos la proporción de muertes con respecto al número de mujeres que dieron a luz.
+
+
+Usar "mutate()" para agregar una nueva columna que se calculará como la proporción de muertes por número de nacimientos.
+
+```{r}
+death_birth_prop <- death_handwashing %>%
+  mutate(death_birth = deaths/births)
+death_birth_prop
+```
+
+
+
+Si ahora graficamos la proporción de muertes tanto en la clínica 1 como en la clínica 2, veremos un patrón curioso.
+
+
+```{r}
+death_birth_prop
+
+ggplot(death_birth_prop, aes(x=year, y=death_birth, color=clinic)) +
+  geom_line() +
+  expand_limits(y=0)
+```
+
+
+¿Por qué la proporción de muertes es mucho más alta en la Clínica 1? La única diferencia en ambas clínicas era que muchos estudiantes de medicina trabajaban en la Clínica 1, mientras que en la Clínica 2 no había tantos. Otro dato interesante es que los médicos que atendían partos solo se encargaban de esa función, mientras que los estudiantes también pasaban tiempo en las salas de autopsias examinando cadáveres.
+Se empezó a sospechar que algo en los cadáveres, propagado de las manos de los estudiantes de medicina, causaba la enfermedad. Entonces, en un intento desesperado por detener las altas tasas de mortalidad, se decretó: ¡Lávese las manos en todo momento!
+
+
+Cargar los datos mensuales de la Clínica 1 para ver si el lavado de manos tuvo algún efecto.
+
+
+```{r}
+death_clinic1 <-read.csv("deaths_clinic_1.csv",  # Nombre archivo
+         header = TRUE,        # Lee el encabezado
+         sep = ",",            # Separador de los valores
+         quote = "\"",         # Caracter de citaciones
+         dec = ".",            # Punto decimal
+         fill = TRUE,          # Rellenar celdas vacías 
+         comment.char = "",    # Carácter de los comentarios o cadenas vacías
+         encoding = "unknown", # Codificación del archivo
+         )   
+death_clinic1 #Se guardó la información en una variable
+```
+
+
+Agregar una nueva columna a la variable creada en el inciso anterior. Esta nueva
+columna se calculará como la proporción de muertes por número de nacimientos.
+
+```{r}
+death_clinic1_prop <- death_clinic1 %>%
+  mutate(death_birth = deaths/births)
+death_clinic1_prop
+```
+
+
+```{r}
+death_clinic1_prop
+
+ggplot(death_birth_prop, aes(x=year, y=death_birth)) +
+  geom_line() +
+  expand_limits(y=0) +
+  labs(x= "Year", y = "Death-Birth Proportion") +
+  theme(axis.title.x = element_text(color = 'Blue')) +
+  theme(axis.title.y = element_text(colour = 'Blue')) +
+  theme(axis.text.x  = element_text(colour = "Purple")) +
+  theme(axis.text.y = element_text(colour = 'Purple'))
+```
+
+Usar group_by para la variable year y summarise para encontrar la media.
+Crear un gráfico de barras que muestre la media en cada año.
+
+
+
+```{r}
+death_mean <- death_clinic1_prop %>%
+  group_by(date) %>%
+  summarise(median_death_birth = median(death_birth))
+death_mean
+barplot(death_mean)
+```
+
+
+
+
+A partir del año 1847 la proporción de muertes se reduce drásticamente y, sí, fue entonces cuando se hizo obligatorio el lavado de manos.
+
+El efecto del lavado de manos se hace aún más claro si lo resaltamos en el gráfico.
+Agregar una columna, está columna será TRUE a partir del año en que se impuso el lavado de manos y FALSE para años anteriores.
+
+
+
+
+
+
+
+
+
 
 
 
