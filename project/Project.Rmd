@@ -102,11 +102,14 @@ Crear un gráfico de barras que muestre la media en cada año.
 
 
 ```{r}
+death_birth_prop["date"]
+
 death_mean <- death_clinic1_prop %>%
-  group_by(date) %>%
-  summarise(median_death_birth = median(death_birth))
+  
+  summarise(mean_death_birth = mean(death_birth))
 death_mean
-barplot(death_mean)
+ggplot(death_mean, aes(x=date, y=mean_death_birth)) +
+  geom_col()
 ```
 
 
@@ -115,7 +118,41 @@ barplot(death_mean)
 A partir del año 1847 la proporción de muertes se reduce drásticamente y, sí, fue entonces cuando se hizo obligatorio el lavado de manos.
 
 El efecto del lavado de manos se hace aún más claro si lo resaltamos en el gráfico.
-Agregar una columna, está columna será TRUE a partir del año en que se impuso el lavado de manos y FALSE para años anteriores.
+Agregar una columna a la variable creada llamada death_clinic1, está columna será TRUE a partir del año en que se impuso el lavado de manos y FALSE para años anteriores.
+
+
+Haacer una gráfica lineal de la columna creada en el inciso 4.2 (eje y) versus la variable date (eje x). Haga que el color
+de la línea dependa de la variable del inciso 6.1.
+
+```{r}
+death_clinic1_1847 <- death_clinic1_prop %>%
+  group_by(date > 1847) 
+
+ggplot(death_clinic1_prop, aes(x=as.Date(date), y=death_birth)) +
+  geom_line() +
+  expand_limits(y=0) +
+  labs(x= "Date", y = "Death-Birth Proportion")
+```
+
+
+
+
+¿Más lavado de manos, menos muertes?
+
+Nuevamente, las estadísticas demuestran que lavarse las manos tuvo un efecto enorme. ¿Cuánto redujo la proporción mensual de muertes en promedio?
+
+
+
+Tome de referencia la variable del inciso 6.1 y la función group_by para crear un agrupamiento.
+
+
+```{r}
+death_clinic1_1847
+```
+
+
+
+
 
 
 
