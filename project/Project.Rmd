@@ -8,12 +8,14 @@ En este proyecto, vamos a analizar los datos que demuestran la importancia del l
 
 
 
-Cargar el paquete tidyverse
-Leer el archivo death_handwashing.csv 
+1.1 argar el paquete tidyverse
+1.2 Leer el archivo death_handwashing.csv 
 
 ```{r}
 library(tidyverse)
 library(dplyr)
+library(lubridate)
+library(readr)
 
 death_handwashing <-read.csv("deaths_handwashing.csv",  # Nombre archivo
          header = TRUE,        # Lee el encabezado
@@ -30,7 +32,7 @@ death_handwashing #Se guardó la información en una variable
 La tabla anterior muestra el número de mujeres que dieron a luz durante los años 1841 a 1846 en una ciudad al noreste de Austria, en dos clínicas en particular. Notará que dar a luz era muy peligroso; un número alarmante de mujeres murió como resultado del parto. Vemos esto con mayor claridad si observamos la proporción de muertes con respecto al número de mujeres que dieron a luz.
 
 
-Usar "mutate()" para agregar una nueva columna que se calculará como la proporción de muertes por número de nacimientos.
+2.1 Usar "mutate()" para agregar una nueva columna que se calculará como la proporción de muertes por número de nacimientos.
 
 ```{r}
 death_birth_prop <- death_handwashing %>%
@@ -40,7 +42,7 @@ death_birth_prop
 
 
 
-Si ahora graficamos la proporción de muertes tanto en la clínica 1 como en la clínica 2, veremos un patrón curioso.
+3.1 Si ahora graficamos la proporción de muertes tanto en la clínica 1 como en la clínica 2, veremos un patrón curioso.
 
 
 ```{r}
@@ -56,7 +58,7 @@ ggplot(death_birth_prop, aes(x=year, y=death_birth, color=clinic)) +
 Se empezó a sospechar que algo en los cadáveres, propagado de las manos de los estudiantes de medicina, causaba la enfermedad. Entonces, en un intento desesperado por detener las altas tasas de mortalidad, se decretó: ¡Lávese las manos en todo momento!
 
 
-Cargar los datos mensuales de la Clínica 1 para ver si el lavado de manos tuvo algún efecto.
+4.1 Cargar los datos mensuales de la Clínica 1 para ver si el lavado de manos tuvo algún efecto.
 
 
 ```{r}
@@ -73,13 +75,15 @@ death_clinic1 #Se guardó la información en una variable
 ```
 
 
-Agregar una nueva columna a la variable creada en el inciso anterior. Esta nueva
+4.2 Agregar una nueva columna a la variable creada en el inciso anterior. Esta nueva
 columna se calculará como la proporción de muertes por número de nacimientos.
 
 ```{r}
 death_clinic1_prop <- death_clinic1 %>%
   mutate(death_birth = deaths/births)
 death_clinic1_prop
+
+head(death_birth_prop)
 ```
 
 
@@ -100,15 +104,28 @@ Usar group_by para la variable year y summarise para encontrar la media.
 Crear un gráfico de barras que muestre la media en cada año.
 
 
+```{r}
+death_clinic1_year <- death_clinic1_prop %>%
+  mutate(date = as.Date(date)) 
+
+year <- format(as.Date(deaths$date, format="%d/%m/%Y"),"%Y")
+
+death_clinic1_year <- death_clinic1_year %>%
+  mutate(year = year)
+
+mean_death_clinic1 <- death_clinic1_year %>%
+  group_by(year) %>%
+  summarise(mean_death_birth = mean(death_birth))
+```
+
+
+
+Utilizar la variable creada para crear un gráfico de barras que muestre la media en cada año.
+
 
 ```{r}
-death_birth_prop["date"]
-
-death_mean <- death_clinic1_prop %>%
-  
-  summarise(mean_death_birth = mean(death_birth))
-death_mean
-ggplot(death_mean, aes(x=date, y=mean_death_birth)) +
+mean_death_clinic1
+ggplot(mean_death_clinic1, aes(x=year, y=mean_death_birth)) +
   geom_col()
 ```
 
@@ -126,7 +143,7 @@ de la línea dependa de la variable del inciso 6.1.
 
 ```{r}
 death_clinic1_1847 <- death_clinic1_prop %>%
-  group_by(date > 1847) 
+  group_by(date >= 1847) 
 
 ggplot(death_clinic1_prop, aes(x=as.Date(date), y=death_birth)) +
   geom_line() +
@@ -142,19 +159,36 @@ ggplot(death_clinic1_prop, aes(x=as.Date(date), y=death_birth)) +
 Nuevamente, las estadísticas demuestran que lavarse las manos tuvo un efecto enorme. ¿Cuánto redujo la proporción mensual de muertes en promedio?
 
 
+Tome de referencia la variable death_clinic1_1847 y la función group_by para crear un agrupamiento.
 
-Tome de referencia la variable del inciso 6.1 y la función group_by para crear un agrupamiento.
 
+variable 4.2
+death_clinic1_prop (death_birth)
 
 ```{r}
-death_clinic1_1847
+mean_death <- death_clinic1_1847 %>%
+  group_by(`date >= 1847`) %>%
+  summarise(mean_death = mean(death_birth))
+mean_death
 ```
 
 
+Utilice la función t.test para calcular un intervalo de confianza del 95%. Los dos grupos que tenemos son proporción mensual de muertes antes y después de que comenzara el lavado de manos. Utilice las variables del inciso 4.2 y 6.1 respectivamente.
 
 
+```{r}
+t.test(death_birth ~ date >= 1847, data = death_clinic1_1847)
+```
 
 
+El intervalo dado por la función t.test() es de tipo Confidence Interval for the Difference Between Means.
+Este tipo de intervalo nos devuelve un rango de valores el cuál es muy probable que contenga la verdadera diferencia entre las medias de dos poblaciones con cierto nivel de confianza. 
+
+Este tipo de intervalo se utiliza cuando no pueden saber con certeza si la diferencia en las medias de la muestra coincide con la verdadera diferencia en las medias de la población, por lo que se crea un intervalo de confianza para la diferencia entre las dos medias. Esto proporciona un rango de valores que probablemente contenga la verdadera diferencia entre las medias poblacionales.
+
+Existe una probabilidad del 95% de que el intervalo de confianza de [0.05290915, 0.09747238] contenga la verdadera diferencia en la proporción de muertes antes y después de que comenzara el lavado de manos.
+
+Debido a que en este intervalo no se encuentra el valor "0", significa que no es posible que no exista diferencia entre un antes y un después. Podemos decir con un 95% de confianza que existe una diferencia en la proporción de muertes antes y después de que comenzara el lavado de manos
 
 
 
